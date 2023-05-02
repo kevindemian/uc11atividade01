@@ -7,30 +7,28 @@
  *
  * @author Adm
  */
-
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class ProdutosDAO {
-    
+
     private conectaDAO conexao;
     private Connection conn;
     private PreparedStatement prep;
     private ResultSet resultset;
     private ArrayList<ProdutosDTO> listagem = new ArrayList<>();
-    
 
     public ProdutosDAO() {
         this.conexao = new conectaDAO();
         this.conn = this.conexao.connectDB();
     }
-    
-    public int cadastrarProduto (ProdutosDTO produto){
+
+    public int cadastrarProduto(ProdutosDTO produto) {
         int status;
         String sql = "INSERT INTO produtos (nome, valor, status) VALUES(?, ?, ?)";
         try {
@@ -45,21 +43,40 @@ public class ProdutosDAO {
             System.out.println("Erro ao conectar: " + ex.getMessage());
             return ex.getErrorCode();
         }
-        
+
     }
-    
-    public ArrayList<ProdutosDTO> listarProdutos(){
-        
-        return listagem;
+
+    public ArrayList<ProdutosDTO> listarProdutos() {
+
+        String sql = "SELECT * FROM produtos";
+        ArrayList<ProdutosDTO> listaProdutos = new ArrayList<>();
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getInt("valor"));
+                produto.setStatus(rs.getString("status"));
+                listaProdutos.add(produto);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("erro: " + e.getMessage());
+            return null;
+        }
+
+        return listaProdutos;
     }
-    
-    
-     public void desconectar() {
+
+    public void desconectar() {
         try {
             conn.close();
         } catch (SQLException ex) {
         }
     }
-        
-}
 
+}
