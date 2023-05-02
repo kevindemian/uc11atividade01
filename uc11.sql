@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `uc11`
 --
-
+CREATE DATABASE uc11;
+USE uc11;
 -- --------------------------------------------------------
 
 --
