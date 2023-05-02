@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 public class cadastroVIEW extends javax.swing.JFrame {
 
     /**
@@ -126,8 +129,8 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cadastroNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroNomeActionPerformed
-        
-        
+
+
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -138,14 +141,13 @@ public class cadastroVIEW extends javax.swing.JFrame {
         produto.setNome(nome);
         produto.setValor(Integer.parseInt(valor));
         produto.setStatus(status);
-        
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
+
+        cadastraProduto(produto);
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
-        listagemVIEW listagem = new listagemVIEW(); 
+        listagemVIEW listagem = new listagemVIEW();
         listagem.setVisible(true);
     }//GEN-LAST:event_btnProdutosActionPerformed
 
@@ -196,4 +198,24 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
+
+    private void cadastraProduto(ProdutosDTO produto) {
+
+        ProdutosDAO produtodao = new ProdutosDAO();
+        int resposta;
+        resposta = produtodao.cadastrarProduto(produto);
+        switch (resposta) {
+            case 1 -> {
+                JOptionPane.showMessageDialog(null, "Dados incluidos com sucesso");
+
+            }
+            case 1062 ->
+                JOptionPane.showMessageDialog(null, "Produto já cadastrado");
+            default ->
+                JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
+        }
+        produtodao.desconectar();
+
+    }
+
 }
